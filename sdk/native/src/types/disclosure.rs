@@ -476,7 +476,7 @@ mod tests {
         note_commitments: Vec<Field>,
         nullifiers: Vec<Field>,
     ) -> DisclosurePublicInputs {
-        let n = note_commitments.len() as u64;
+        let note_count = note_commitments.len();
         DisclosurePublicInputs {
             // Notes legitimately share a Merkle root, so roots are not required
             // to be unique; only commitments and nullifiers are.
@@ -484,7 +484,7 @@ mod tests {
             note_commitments,
             ext_context_hash: field(3),
             nullifiers,
-            amounts: (0..n).map(|i| field(5 + i)).collect(),
+            amounts: vec![field(5); note_count],
         }
     }
 
