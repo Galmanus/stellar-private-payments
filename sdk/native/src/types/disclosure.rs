@@ -242,19 +242,13 @@ impl DisclosurePublicInputs {
             return Err(anyhow!("amounts length does not match n_notes"));
         }
 
-        // Each note may be disclosed at most once. The Groth16 proof attests
-        // every note slot independently, so nothing in the proof stops a prover
-        // from placing the same note in multiple slots; doing so would
-        // double-count its amount and inflate the disclosed balance. The note
-        // commitment is a public input, so repeats are rejected here (#647).
+        // Reject duplicate commitments in the disclosed note slots.
         if let Some(duplicate) = first_duplicate(&self.note_commitments) {
             return Err(anyhow!(
                 "duplicate note commitment in disclosure: {duplicate}"
             ));
         }
-        // Defense in depth: a nullifier is derived per note, so distinct notes
-        // always produce distinct nullifiers. A repeat is the same symptom and
-        // is rejected regardless of the commitments.
+        // Distinct notes have distinct nullifiers, even when commitments repeat.
         if let Some(duplicate) = first_duplicate(&self.nullifiers) {
             return Err(anyhow!("duplicate nullifier in disclosure: {duplicate}"));
         }
