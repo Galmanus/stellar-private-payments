@@ -248,7 +248,8 @@ impl DisclosurePublicInputs {
                 "duplicate note commitment in disclosure: {duplicate}"
             ));
         }
-        // Distinct notes have distinct nullifiers, even when commitments repeat.
+        // Distinct notes have distinct nullifiers, even when commitments
+        // repeat.
         if let Some(duplicate) = first_duplicate(&self.nullifiers) {
             return Err(anyhow!("duplicate nullifier in disclosure: {duplicate}"));
         }
@@ -499,8 +500,8 @@ mod tests {
 
     #[test]
     fn validate_rejects_duplicate_note_commitments() {
-        // Repeating the same note across slots would double-count its amount and
-        // inflate the disclosed balance (#647).
+        // Repeating the same note across slots would double-count its amount
+        // and inflate the disclosed balance (#647).
         let public_inputs =
             multi_note_public_inputs(vec![field(2), field(2)], vec![field(4), field(5)]);
 
